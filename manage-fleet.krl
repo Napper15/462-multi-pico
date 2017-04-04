@@ -7,6 +7,11 @@ ruleset manage_fleet {
         use module Subscriptions
         shares vehicles, get_all
     }
+    global{
+        vehicles = function(){
+            ent:vehicles
+            }
+        }
     rule create_vehicle {
         select when car new_vehicle
         pre{
@@ -27,9 +32,7 @@ ruleset manage_fleet {
                 }
         }
     }
-    vehicles = function(){
-        ent:vehicles
-    }
+   
     rule delete_vehicle {
         select when car uneeded_vehicle
         pre {
@@ -44,8 +47,8 @@ ruleset manage_fleet {
         fired{}
         else {
             raise pico event "delete_child_request"
-                attributes child_to_delete
-            ent:sections{[vehicle_id]} := null
+                attributes child_to_delete;
+            ent:vehicles{[vehicle_id]} := null
         }
     }
 }
